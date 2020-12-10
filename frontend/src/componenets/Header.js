@@ -7,8 +7,9 @@ import { logout } from '../actions/userActions';
 const Header = () => {
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
+  const cart = useSelector((state) => state.cart);
   const { userInfo } = userLogin;
-
+  console.log('cart', cart);
   const logoutHandler = () => {
     dispatch(logout());
   };
@@ -25,7 +26,8 @@ const Header = () => {
             <Nav className='ml-auto'>
               <LinkContainer to='/cart'>
                 <Nav.Link>
-                  <i className='fas fa-shopping-cart'></i> Cart
+                  <i className='fas fa-shopping-cart'></i> Cart (
+                  {cart.cartItems.length})
                 </Nav.Link>
               </LinkContainer>
               {userInfo ? (
