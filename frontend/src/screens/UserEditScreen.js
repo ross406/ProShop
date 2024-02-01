@@ -7,9 +7,15 @@ import Loader from '../componenets/Loader';
 import { getUserDetails, updateUser } from '../actions/userActions';
 import FormContainer from '../componenets/FormContainer';
 import { USER_UPDATE_RESET } from '../constants/userConstants';
+import { useHistory, useParams } from 'react-router-dom/cjs/react-router-dom.min';
 
-const UserEditScreen = ({ match, history }) => {
-  const userId = match.params.id;
+const UserEditScreen = () => {
+
+  const history = useHistory();
+  const params = useParams();
+ 
+
+  const userId = params?.id;
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);

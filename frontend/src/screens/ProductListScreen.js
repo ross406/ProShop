@@ -11,9 +11,12 @@ import {
   createProduct,
 } from '../actions/productActions';
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants';
+import { useHistory, useParams } from 'react-router-dom/cjs/react-router-dom.min';
 
-const ProductListScreen = ({ history, match }) => {
-  const pageNumber = match.params.pageNumber || 1;
+const ProductListScreen = () => {
+  const history = useHistory();
+  const params = useParams();
+  const pageNumber = params?.pageNumber || 1;
   const dispatch = useDispatch();
 
   const productList = useSelector((state) => state.productList);

@@ -8,9 +8,15 @@ import Loader from '../componenets/Loader';
 import { listProductDetails, updateProduct } from '../actions/productActions';
 import FormContainer from '../componenets/FormContainer';
 import { PRODUCT_UPDATE_RESET } from '../constants/productConstants';
+import { useHistory, useParams } from 'react-router-dom/cjs/react-router-dom.min';
 
-const ProductEditScreen = ({ match, history }) => {
-  const productId = match.params.id;
+const ProductEditScreen = () => {
+
+  const history = useHistory();
+  const params = useParams();
+
+
+  const productId = params?.id;
 
   const [name, setName] = useState('');
   const [price, setPrice] = useState(0);

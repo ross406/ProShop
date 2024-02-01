@@ -6,8 +6,13 @@ import Message from '../componenets/Message';
 import Loader from '../componenets/Loader';
 import { login } from '../actions/userActions';
 import FormContainer from '../componenets/FormContainer';
+import { useHistory, useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 
-const LoginScreen = ({ location, history }) => {
+const LoginScreen = () => {
+
+  const history = useHistory();
+  const location = useLocation();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -16,7 +21,7 @@ const LoginScreen = ({ location, history }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
 
-  const redirect = location.search ? location.search.split('=')[1] : '/';
+  const redirect = location?.search ? location?.search.split('=')[1] : '/';
 
   useEffect(() => {
     if (userInfo) {

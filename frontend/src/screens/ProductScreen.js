@@ -19,8 +19,12 @@ import Loader from '../componenets/Loader';
 import Message from '../componenets/Message';
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants';
 import Meta from '../componenets/Meta';
+import { useHistory, useParams } from 'react-router-dom/cjs/react-router-dom.min';
 
-const ProductScreen = ({ history, match }) => {
+const ProductScreen = () => {
+  const params = useParams();
+  const history = useHistory();
+
   const [qty, setQty] = useState(1);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -45,17 +49,19 @@ const ProductScreen = ({ history, match }) => {
       setComment('');
       dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
     }
-    dispatch(listProductDetails(match.params.id));
-  }, [dispatch, match, successProductReview]);
+    if(params?.id){
+      dispatch(listProductDetails(params?.id));
+    }
+  }, [dispatch, successProductReview]);
 
   const addToCartHandler = () => {
-    history.push(`/cart/${match.params.id}?qty=${qty}`);
+    history.push(`/cart/${params?.id}?qty=${qty}`);
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(
-      createProductReview(match.params.id, {
+      createProductReview(params?.id, {
         rating,
         comment,
       })

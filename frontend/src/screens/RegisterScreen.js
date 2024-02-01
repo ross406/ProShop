@@ -6,8 +6,11 @@ import Message from '../componenets/Message';
 import Loader from '../componenets/Loader';
 import { register } from '../actions/userActions';
 import FormContainer from '../componenets/FormContainer';
+import { useHistory, useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 
-const RegisterScreen = ({ location, history }) => {
+const RegisterScreen = () => {
+  const history = useHistory();
+  const location = useLocation();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,7 +22,7 @@ const RegisterScreen = ({ location, history }) => {
   const userRegister = useSelector((state) => state.userRegister);
   const { loading, error, userInfo } = userRegister;
 
-  const redirect = location.search ? location.search.split('=')[1] : '/';
+  const redirect = location?.search ? location?.search.split('=')[1] : '/';
 
   useEffect(() => {
     if (userInfo) {

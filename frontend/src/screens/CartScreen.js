@@ -13,10 +13,16 @@ import {
 } from 'react-bootstrap';
 import { addToCart, removeFromCart } from '../actions/cartActions';
 import { useEffect } from 'react';
+import { useHistory, useLocation, useParams } from 'react-router-dom/cjs/react-router-dom.min';
 
-const CartScreen = ({ match, location, history }) => {
-  const productId = match.params.id;
-  const qty = location.search ? Number(location.search.split('=')[1]) : 1;
+const CartScreen = () => {
+
+  const history = useHistory();
+  const params = useParams();
+  const location = useLocation();
+
+  const productId = params?.id;
+  const qty = location?.search ? Number(location?.search.split('=')[1]) : 1;
   const dispatch = useDispatch();
 
   const cart = useSelector((state) => state.cart);

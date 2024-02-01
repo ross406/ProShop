@@ -4,8 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import FormContainer from '../componenets/FormContainer';
 import CheckoutSteps from '../componenets/CheckoutSteps';
 import { savePaymentMethod } from '../actions/cartActions';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
-const PaymentScreen = ({ history }) => {
+const PaymentScreen = () => {
+
+  const history = useHistory();
+
   const cart = useSelector((state) => state.cart);
   const { shippingAddress } = cart;
 

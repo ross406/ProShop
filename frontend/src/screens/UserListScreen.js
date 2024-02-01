@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../componenets/Message';
 import Loader from '../componenets/Loader';
 import { listUsers, deleteUser } from '../actions/userActions';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
-const UserListScreen = ({ history }) => {
+const UserListScreen = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
 
   const userList = useSelector((state) => state.userList);

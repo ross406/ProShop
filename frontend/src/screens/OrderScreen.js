@@ -15,9 +15,15 @@ import {
   ORDER_PAY_RESET,
   ORDER_DELIVER_RESET,
 } from '../constants/orderConstants';
+import { useHistory, useParams } from 'react-router-dom/cjs/react-router-dom.min';
 
-const OrderScreen = ({ match, history }) => {
-  const orderId = match.params.id;
+const OrderScreen = () => {
+
+  const history = useHistory();
+  const params = useParams();
+
+
+  const orderId = params?.id;
 
   const [sdkReady, setSdkReady] = useState(false);
 

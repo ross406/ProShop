@@ -6,8 +6,12 @@ import Loader from '../componenets/Loader';
 import { getUserDetails, updateUserProfile } from '../actions/userActions';
 import { listMyOrders } from '../actions/orderActions';
 import { LinkContainer } from 'react-router-bootstrap';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
-const ProfileScreen = ({ location, history }) => {
+const ProfileScreen = () => {
+
+  const history = useHistory();
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

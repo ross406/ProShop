@@ -5,8 +5,12 @@ import Message from '../componenets/Message';
 import CheckoutSteps from '../componenets/CheckoutSteps';
 import { Link } from 'react-router-dom';
 import { createOrder } from '../actions/orderActions';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
-const PlaceOrderScreen = ({ history }) => {
+const PlaceOrderScreen = () => {
+  
+  const history = useHistory();
+
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 

@@ -10,11 +10,13 @@ import Message from '../componenets/Message';
 import ProductCarousel from '../componenets/ProductCarousel';
 import Meta from '../componenets/Meta';
 import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
 
-const HomeScreen = ({ match }) => {
-  const keyword = match.params.keyword;
+const HomeScreen = () => {
+  const params = useParams();
+  const keyword = params?.keyword;
 
-  const pageNumber = match.params.pageNumber || 1;
+  const pageNumber = params?.pageNumber || 1;
 
   const dispatch = useDispatch();
 
