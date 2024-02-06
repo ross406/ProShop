@@ -30,11 +30,40 @@ const RegisterScreen = () => {
     }
   }, [history, userInfo, redirect]);
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+  const validateForm = () => {
+    // Check if any of the fields are empty
+    if (!name || !email || !password || !confirmPassword) {
+      setMessage('Please fill in all fields');
+      return false;
+    }
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setMessage('Invalid email format');
+      return false;
+    }
+    // Check password length
+    if (password.length < 8) {
+      setMessage('Password must be at least 8 characters');
+      return false;
+    }
+    // Check if passwords match
     if (password !== confirmPassword) {
       setMessage('Passwords do not match');
-    } else {
+      return false;
+    }
+    // If all validations pass
+    return true;
+  };
+
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+  
+    setMessage(null);
+
+    if (validateForm()) {
+      // If validation passes, dispatch register action
       dispatch(register(name, email, password));
     }
   };
