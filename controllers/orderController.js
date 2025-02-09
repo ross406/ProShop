@@ -1,10 +1,18 @@
 import asyncHandler from 'express-async-handler';
 import Order from '../models/orderModel.js';
+import { instance } from "../server.js";
+import crypto from "crypto";
+import { CLIENT_URL } from '../utils/constants.js';
+
+
+
+
 
 // @desc    CREATE new order
 // @route    POST /api/orders
 // @access    Private
 const addOrderItems = asyncHandler(async (req, res) => {
+
   const {
     orderItems,
     shippingAddress,
@@ -14,6 +22,12 @@ const addOrderItems = asyncHandler(async (req, res) => {
     shippingPrice,
     totalPrice,
   } = req.body;
+  
+    const options = {
+      amount: Number(totalPrice * 100),
+      currency: "INR",
+    };
+    const razorpayOrder = await instance.orders.create(options);
 
   if (orderItems && orderItems.length === 0) {
     res.status(400);
@@ -32,7 +46,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     });
     const createdOrder = await order.save();
 
-    res.status(201).json(createdOrder);
+    res.status(201).json({createdOrder,razorpayOrder});
   }
 });
 
@@ -47,6 +61,49 @@ const getOrderById = asyncHandler(async (req, res) => {
 
   if (order) {
     res.json(order);
+  } else {
+    res.status(404);
+    throw new Error('Order not Found');
+  }
+});
+
+// @desc    Update order to paid
+// @route    GET /api/orders/:id/razorpay
+// @access    Private
+const updateOrderToPaidRazorpay = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+  // const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+  // const body = razorpay_order_id + "|" + razorpay_payment_id;
+
+  // const expectedSignature = crypto
+  // .createHmac("sha256", process.env.RAZORPAY_APT_SECRET)
+  // .update(body.toString())
+  // .digest("hex");
+
+  // const isAuthentic = expectedSignature === razorpay_signature;
+
+
+  if (order) {
+    order.isPaid = true;
+    order.paidAt = Date.now();
+    order.paymentResult = {
+      id: req.params.id,
+      // razorpay_order_id,
+      // razorpay_payment_id,
+      // razorpay_signature,
+      status: "Paid",
+      update_time: Date.now(),
+      // email_address: "test@gmail.com",
+    };
+
+    const updatedOrder = await order.save();
+ 
+    // res.json(updatedOrder);  
+    res.redirect(
+      `${CLIENT_URL}/order/${req.params.id}`
+      // `${CLIENT_URL}/order/${req.params.id}?reference=${razorpay_payment_id}`
+    );
   } else {
     res.status(404);
     throw new Error('Order not Found');
@@ -118,6 +175,7 @@ const getOrders = asyncHandler(async (req, res) => {
 export {
   addOrderItems,
   getOrderById,
+  updateOrderToPaidRazorpay,
   updateOrderToPaid,
   updateOrderToDelivered,
   getMyOrders,

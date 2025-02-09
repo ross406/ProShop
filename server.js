@@ -17,6 +17,7 @@ import { errorHandler, notFound } from './middleware/errorMiddleware.js';
 import User from './models/userModel.js';
 import generateToken from './utils/generateToken.js';
 import { CLIENT_URL } from './utils/constants.js';
+import Razorpay from 'razorpay';
 
 dotenv.config();
 
@@ -39,6 +40,12 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+export const instance = new Razorpay({
+  key_id: process.env.RAZORPAY_API_KEY,
+  key_secret: process.env.RAZORPAY_SECRET,
+});
+
 
 passport.use(
   new OAuth2Strategy.Strategy({
