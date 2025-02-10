@@ -22,32 +22,42 @@ const addOrderItems = asyncHandler(async (req, res) => {
     shippingPrice,
     totalPrice,
   } = req.body;
-  
-    const options = {
-      amount: Number(totalPrice * 100),
-      currency: "INR",
-    };
-    const razorpayOrder = await instance.orders.create(options);
 
-  if (orderItems && orderItems.length === 0) {
-    res.status(400);
-    throw new Error('No order items');
-    return;
-  } else {
-    const order = new Order({
-      orderItems,
-      user: req.user._id,
-      shippingAddress,
-      paymentMethod,
-      itemsPrice,
-      taxPrice,
-      shippingPrice,
-      totalPrice,
-    });
-    const createdOrder = await order.save();
+    try {
+      const options = {
+        amount: Math.round(Number(totalPrice * 100)),
+        currency: "INR",
+      };
+      const razorpayOrder = await instance.orders.create(options);
+      
+      if (orderItems && orderItems.length === 0) {
+        res.status(400);
+        throw new Error('No order items');
+        return;
+      } else {
+        const order = new Order({
+          orderItems,
+          user: req.user._id,
+          shippingAddress,
+          paymentMethod,
+          paymentResult: {       
+            razorpay_order_id: razorpayOrder.id
+          },
+          itemsPrice,
+          taxPrice,
+          shippingPrice,
+          totalPrice,
+        });
+        const createdOrder = await order.save();
 
-    res.status(201).json({createdOrder,razorpayOrder});
-  }
+        res.status(201).json({createdOrder,razorpayOrder});
+      }
+      
+    } catch (error) {
+      res.status(500);
+      console.log('error : ',error);
+    }
+    
 });
 
 // @desc    Get order by Id
@@ -58,7 +68,7 @@ const getOrderById = asyncHandler(async (req, res) => {
     'user',
     'name email'
   );
-
+ 
   if (order) {
     res.json(order);
   } else {
@@ -82,7 +92,7 @@ const updateOrderToPaidRazorpay = asyncHandler(async (req, res) => {
   // .digest("hex");
 
   // const isAuthentic = expectedSignature === razorpay_signature;
-
+  
 
   if (order) {
     order.isPaid = true;
