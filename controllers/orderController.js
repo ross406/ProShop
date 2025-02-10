@@ -111,7 +111,8 @@ const updateOrderToPaidRazorpay = asyncHandler(async (req, res) => {
  
     // res.json(updatedOrder);  
     res.redirect(
-      `${CLIENT_URL}/order/${req.params.id}`
+      `${CLIENT_URL}`
+      // `${CLIENT_URL}/order/${req.params.id}`
       // `${CLIENT_URL}/order/${req.params.id}?reference=${razorpay_payment_id}`
     );
   } else {
